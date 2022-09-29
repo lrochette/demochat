@@ -71,7 +71,7 @@ describe.skip('user CRUD tests', function(){
     console.log('create user test')
     //user.provider = 'github';
     //user.username = 'verchol' + guid;
-    var id =  require('node-uuid').v4();
+    var id =  require('uuid').v4();
     debug('id'  + id);
     //user.uid = id;
     user.testField = "moshe";// + guid;
