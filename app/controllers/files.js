@@ -28,12 +28,12 @@ module.exports = function() {
     });
 
     var fileUpload = multer({
-        putSingleFilesInArray: true,
         limits: {
             files: 1,
             fileSize: settings.maxFileSize
-        }
-    });
+        },
+        storage: multer.diskStorage({})
+    }).any();
 
     //
     // Routes
@@ -65,11 +65,23 @@ module.exports = function() {
                     return res.send(400);
                 }
 
+                if (!file) {
+                    return res.send(404);
+                }
+
+                var isImage = [
+                  'image/jpeg',
+                  'image/png',
+                  'image/gif'
+                ].indexOf(file.type) > -1;
+
                 var url = core.files.getUrl(file);
+
                 if (settings.provider === 'local') {
                     res.sendFile(url, {
                         headers: {
-                            'Content-Type': file.type
+                            'Content-Type': file.type,
+                            'Content-Disposition': isImage ? 'inline' : 'attachment'
                         }
                     });
                 } else {
@@ -84,14 +96,14 @@ module.exports = function() {
     //
     app.io.route('files', {
         create: function(req, res) {
-            if (!req.files || !req.files.file) {
+            if (!req.files) {
                 return res.sendStatus(400);
             }
 
             var options = {
                     owner: req.user._id,
                     room: req.param('room'),
-                    file: req.files.file[0],
+                    file: req.files[0],
                     post: (req.param('post') === 'true') && true
                 };
 

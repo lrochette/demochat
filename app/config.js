@@ -1,15 +1,13 @@
-
+'use strict';
 
 var _ = require('lodash'),
     fs = require('fs'),
     yaml = require('js-yaml'),
     plugins = require('./plugins');
-var path  = require('path');
-var debug = require('debug')('config readers');
 
 function parseEnvValue(value, isArray) {
     value = value.trim();
-    if (isArray) {s
+    if (isArray) {
         return _.map(value.split(','), function(value) {
             return parseEnvValue(value);
         });
@@ -31,12 +29,8 @@ function parseEnvValue(value, isArray) {
 var pipeline = [
 
     function getDefaultSettings(context) {
-        var execPath = process.env.CWD || process.cwd();
-        var defaultsPath = path.resolve(execPath,'./defaults.yml');
-        var file = fs.readFileSync(defaultsPath, 'utf8');
+        var file = fs.readFileSync('defaults.yml', 'utf8');
         context.defaults = yaml.safeLoad(file);
-
-        console.log(JSON.stringify(context.defaults));
     },
 
     function getFileSettings(context) {
@@ -162,8 +156,8 @@ var pipeline = [
         if (process.env.MONGOLAB_URI) {
             context.result.database.uri = process.env.MONGOLAB_URI;
         }
-        if (process.env.MONGO_DOCKER) {
-            context.result.database.uri = process.env.MONGO_DOCKER;
+        if (process.env.MONGODB_URI) {
+            context.result.database.uri = process.env.MONGODB_URI;
         }
     },
 
@@ -186,7 +180,5 @@ var context = {
 _.each(pipeline, function(step) {
     step(context);
 });
-
-console.log(JSON.stringify(context.result));
 
 module.exports = context.result;

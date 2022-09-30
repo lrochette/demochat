@@ -10,10 +10,6 @@ app:
   ports:
     - 80:8080
     - 5222:5222
-  command: ls .
-
 
 mongo:
   image: mongo:latest
-  ports :
-    - 27017:27017

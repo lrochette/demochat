@@ -1,3 +1,42 @@
+## 0.4.8 (2016-09-26)
+
+Fixes
+
+* Undefined avatar/email value (#715)
+* SVG XSS Vector
+* Dropped migroose
+* Uploaded file's path error (#700)
+* Add builtAssets to docker setup (#698)
+* Default locale settings (#696)
+
+Enhancements
+
+* Italian translation
+* Add passphrase setting for https
+
+## 0.4.7 (2016-5-10)
+
+Fixes
+
+* Update dependencies
+* Chrome display issues
+* CSP warning
+
+Enhancements
+
+* Azerbaijani, Turkish language packs
+
+## 0.4.6 (2016-1-22)
+
+Fixes
+
+* Display bugs in Chrome 48
+* NODE_PATH whitespace issue
+
+Enhancements
+
+* nl/es language adjustments
+
 ## 0.4.5 (2015-12-22)
 
 Fixes

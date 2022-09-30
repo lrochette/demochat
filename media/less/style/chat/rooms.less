@@ -50,6 +50,11 @@
     .flex(1);
 }
 
+.lcb-room-meta-text {
+    min-width: 100%;
+    max-width: 0;
+}
+
 .lcb-room-heading {
     font-size: 24px;
     font-weight: 300;
@@ -73,7 +78,6 @@
 
 .lcb-room-description {
     font-weight: 300;
-    color: #9f9f9f;
     margin: 0;
     display: inline;
     @media (max-width: @screen-xs-max) {
@@ -230,6 +234,7 @@
     overflow: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    .flex(1);
     .transform(translate3d(0,0,0));
 }
 
@@ -321,4 +326,3 @@
         .text-overflow;
     }
 }
-

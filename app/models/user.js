@@ -3,10 +3,10 @@
 //
 
 'use strict';
-var debug = require('debug')('model->user');
+
 var bcrypt = require('bcryptjs'),
     crypto = require('crypto'),
-    md5 =   require('md5'),
+    md5 = require('md5'),
     hash = require('node_hash'),
     mongoose = require('mongoose'),
     uniqueValidator = require('mongoose-unique-validator'),
@@ -26,8 +26,7 @@ var UserSchema = new mongoose.Schema({
         required: false,
         trim: true,
         validate: [function(v) {
-            debug('validation of uid: ' + v.length +"," + v);
-            return (v.length <= 40);
+            return (v.length <= 24);
         }, 'invalid ldap/kerberos username']
     },
     email: {
@@ -89,7 +88,11 @@ var UserSchema = new mongoose.Schema({
     },
     rooms: [{
 		type: ObjectId,
-		ref: 'Room'
+		ref: 'Room' 
+    }],
+    openRooms: [{
+      		type: String,
+                trim: true
     }],
 	messages: [{
 		type: ObjectId,
@@ -109,19 +112,20 @@ UserSchema.virtual('local').get(function() {
 });
 
 UserSchema.virtual('avatar').get(function() {
+    if (!this.email) {
+      return null;
+    }
     return md5(this.email);
 });
 
 UserSchema.pre('save', function(next) {
     var user = this;
-    debug('presaving');
     if (!user.isModified('password')) {
         return next();
     }
 
     bcrypt.hash(user.password, 10, function(err, hash) {
         if (err) {
-          debug('err:' + err);
             return next(err);
         }
         user.password = hash;
@@ -274,14 +278,9 @@ UserSchema.method('toJSON', function() {
         lastName: this.lastName,
         username: this.username,
         displayName: this.displayName,
-        avatar: this.avatar
+        avatar: this.avatar,
+        openRooms: this.openRooms,
     };
 });
-debug('adding model' + UserSchema);
-var s = mongoose.model('User', UserSchema);
 
-var assert = require('assert');
-assert(mongoose.model('User'));
-
-debug('user schema registered');
-module.exports = s
+module.exports = mongoose.model('User', UserSchema);
